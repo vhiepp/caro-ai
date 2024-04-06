@@ -222,10 +222,7 @@ function showPopup(message, icon = "success") {
     icon: icon,
     showConfirmButton: false,
     timer: 3000,
-  }).then((result) => {
-    resetGame();
-    printBtnPlayScreen(-100, -100);
-  });
+  }).then((result) => {});
 }
 
 async function cellClick(index) {
@@ -235,14 +232,25 @@ async function cellClick(index) {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
     setTimeout(() => {
       if (checkWin(currentPlayer === "X" ? "O" : "X")) {
+        click = false;
+        playing = false;
         printResult(currentPlayer === "X" ? "O" : "X");
-        resetGame();
+
+        setTimeout(() => {
+          resetGame();
+          printBtnPlayScreen(-100, -100);
+        }, 3000);
         return;
       }
       if (checkDraw()) {
+        click = false;
+        playing = false;
         printResult("");
 
-        resetGame();
+        setTimeout(() => {
+          resetGame();
+          printBtnPlayScreen(-100, -100);
+        }, 3000);
         return;
       }
 
@@ -341,9 +349,7 @@ function printSelectLevelScreen(mouseX, mouseY) {
   var buttonWidth = 300;
   var buttonHeight = 72;
 
-  // Tạo mảng chứa thông tin về các nút
   const positionYFirstBtn = 500;
-
   boardCtx.drawImage(
     imgLogo,
     (boardCanvas.width - logoSize) / 2,
@@ -352,6 +358,7 @@ function printSelectLevelScreen(mouseX, mouseY) {
     logoSize
   );
 
+  // Tạo mảng chứa thông tin về các nút
   var buttons = [
     {
       img: {
@@ -492,11 +499,11 @@ function onResults(results) {
       const value = test;
       // console.log(value);
       if (click) {
-        if (value >= 0.03) {
+        if (value >= 0.02) {
           click = false;
         }
       } else {
-        if (value < 0.025) {
+        if (value < 0.015) {
           click = true;
         }
       }
