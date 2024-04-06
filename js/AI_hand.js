@@ -257,7 +257,12 @@ async function cellClick(index) {
       if (currentPlayer === "X") {
         setTimeout(() => {
           if (level === 0) {
-            aiMove();
+            const rd = Math.floor(Math.random() * 3);
+            if (rd == 0) {
+              aiMove2();
+            } else {
+              aiMove();
+            }
           } else if (level === 1) {
             const rd = Math.floor(Math.random() * 2);
             if (rd == 0) {
@@ -274,16 +279,11 @@ async function cellClick(index) {
   }
 }
 
-// boardCtx.fillStyle = "#fff";
-
-// boardCtx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
-
 let click = false;
 
 function printBtnPlayScreen(mouseX, mouseY) {
   boardCtx.fillStyle = "#fff";
   boardCtx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
-  // boardCtx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
   // Tạo nút "Chơi Ngay"
   var buttonWidth = 300;
   var buttonHeight = 72;
@@ -295,27 +295,17 @@ function printBtnPlayScreen(mouseX, mouseY) {
   // Vẽ hình chữ nhật (nút)
   if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
     if (click) {
-      // boardCtx.fillStyle = "#286b2a"; // Màu nền của nút
       boardCtx.drawImage(imgPlayBtnClick, buttonX, buttonY, buttonWidth, buttonHeight);
       setTimeout(() => {
         selectingLevel = true;
         printSelectLevelScreen(0, 0);
       }, 500);
     } else {
-      // boardCtx.fillStyle = "#3b8c3e"; // Màu nền của nút
       boardCtx.drawImage(imgPlayBtnHover, buttonX, buttonY, buttonWidth, buttonHeight);
     }
   } else {
-    // boardCtx.fillStyle = "#4CAF50"; // Màu nền của nút
     boardCtx.drawImage(imgPlayBtn, buttonX, buttonY, buttonWidth, buttonHeight);
   }
-  // boardCtx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
-
-  // Viết nội dung trên nút
-  // boardCtx.font = "40px Arial";
-  // boardCtx.fillStyle = "white";
-  // boardCtx.textAlign = "center";
-  // boardCtx.fillText("Chơi Ngay", boardCanvas.width / 2, boardCanvas.height / 2 + 10);
 
   if (click) {
     boardCtx.drawImage(img2, mouseX, mouseY, 50, 50);
@@ -324,19 +314,13 @@ function printBtnPlayScreen(mouseX, mouseY) {
   }
 }
 
-// showPopup("Chúc mừng! Bạn đã chiến thắng", "success");
-// showPopup("Hihii! Máy đã thắng", "info");
-
 function printResult(result) {
   if (result === "O") {
     showPopup("Chúc mừng! Bạn đã chiến thắng", "success");
-    // window.location.reload();
   } else if (result === "X") {
     showPopup("Hihii! Máy đã thắng", "error");
-    // window.location.reload();
   } else {
     showPopup("Hòa rồi :))", "info");
-    // window.location.reload();
   }
 }
 
@@ -462,14 +446,6 @@ class V3 {
 }
 
 function onResults(results) {
-  // if (results.multiHandLandmarks.length > 0) {
-  //   // Kiểm tra có bàn tay nào được phát hiện không
-  //   const landmarks = results.multiHandLandmarks[0];
-  //   const isLeftHand = landmarks[0].x < landmarks[8].x;
-  //   const handLabel = isLeftHand ? "Phải" : "Trái";
-  //   console.log(`Tay ${handLabel}:`);
-  // }
-
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
@@ -486,16 +462,9 @@ function onResults(results) {
       const landmarks = results.multiHandLandmarks[0];
       const isLeftHand = landmarks[0].x < landmarks[8].x;
       const handLabel = isLeftHand ? "Phải" : "Trái";
-      //   console.log(results.multiHandLandmarks);
-      const test = V3.distance(results.multiHandLandmarks[0][8], results.multiHandLandmarks[0][4]);
-      //   console.log({
-      //     x: results.multiHandLandmarks[0][8].x * 100 - 10,
-      //     y: results.multiHandLandmarks[0][8].y * 100 - 10,
-      //   });
-      // console.log({ z: results.multiHandLandmarks[0][8].z });
 
-      //   console.log(test);
-      //   let value = test - results.multiHandLandmarks[0][8].z * (results.multiHandLandmarks[0][8].z < 0 ? 10 : 1);
+      const test = V3.distance(results.multiHandLandmarks[0][8], results.multiHandLandmarks[0][4]);
+
       const value = test;
       // console.log(value);
       if (click) {
