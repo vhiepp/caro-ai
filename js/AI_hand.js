@@ -342,7 +342,7 @@ function printSelectLevelScreen(mouseX, mouseY) {
   var buttonHeight = 72;
 
   // Tạo mảng chứa thông tin về các nút
-  const positionYFirstBtn = 400;
+  const positionYFirstBtn = 500;
 
   boardCtx.drawImage(
     imgLogo,
