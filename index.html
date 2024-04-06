@@ -44,7 +44,6 @@
       .chess-board_cell-item {
         width: 360px;
         height: 360px;
-        /* background-color: aquamarine; */
         position: absolute;
         border: 1px solid #ccc;
         justify-content: center;
@@ -67,14 +66,45 @@
         background-color: aqua;
         opacity: 0.2;
       }
+      .user-manual {
+        padding: 1rem 1.8rem;
+        background-color: #fff5e8;
+        border-radius: 1rem;
+        width: 340px;
+      }
+      .user-manual_title {
+        font-size: 1.6rem;
+      }
+      .user-manual_desc {
+        font-size: 1.4rem;
+        font-weight: 400;
+        text-align: justify;
+      }
     </style>
   </head>
   <body>
     <main id="container_app">
       <div id="container_AI" style="display: flex; gap: 10px">
-        <div style="display: none">
-          <video class="input_video"></video>
-          <canvas class="output_canvas" width="400px" height="400px"></canvas>
+        <div>
+          <div style="display: none">
+            <video class="input_video"></video>
+            <canvas class="output_canvas" width="500px" height="500px"></canvas>
+          </div>
+          <div class="user-manual">
+            <h2 class="user-manual_title">Hướng dẫn</h2>
+            <div>
+              <img src="../images/1.png" alt="" style="width: 70px" />
+              <p class="user-manual_desc">
+                1. Đứng đối diện màn hình hiển thị 2 - 3m, sử dụng bàn tay phải đưa về phía trước để điền khiển di
+                chuyển con trỏ bàn tay.
+              </p>
+            </div>
+            <div>
+              <img src="../images/2.png" alt="" style="width: 70px" />
+              <p class="user-manual_desc">2. Bấm ngón cái và ngón trỏ với nhau để chọn.</p>
+            </div>
+            <!-- <h2 class="user-manual_title">Cài đặt</h2> -->
+          </div>
         </div>
         <div
           style="
@@ -112,10 +142,6 @@
     <script>
       let num_hand = 0;
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script src="js/AI_hand.js"></script>
     <!-- <script type="module" src="js/3d.js"></script> -->
   </body>

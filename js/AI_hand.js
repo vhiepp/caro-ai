@@ -11,6 +11,8 @@ const level0 = document.getElementById("level0");
 const level1 = document.getElementById("level1");
 const level2 = document.getElementById("level2");
 
+const DPI = 40;
+
 // Tạo đối tượng hình ảnh
 var img1 = new Image();
 var img2 = new Image();
@@ -51,6 +53,9 @@ imgKhoBtnClick.src = "../images/button/khoClicked.png";
 img1.src = "../images/1.png";
 img2.src = "../images/2.png";
 
+let mouseX = 0;
+let mouseY = 0;
+
 let level = 0;
 let selectingLevel = false;
 let playing = false;
@@ -67,6 +72,9 @@ let matrix = [
   { i: 2, j: 1 },
   { i: 2, j: 2 },
 ];
+
+const DPI_MIN = (100 - DPI) / 2;
+const DPI_MAX = DPI_MIN + DPI;
 
 async function renderBoard() {
   level0.style = "display: none";
@@ -216,12 +224,13 @@ function minimax(cells, depth, isMaximizing) {
   }
 }
 
-function showPopup(message, icon = "success") {
+function showPopup(message, playerWin = "BẠN THẮNG") {
   Swal.fire({
-    title: message,
-    icon: icon,
+    title: playerWin,
+    text: message,
+    icon: false,
     showConfirmButton: false,
-    timer: 3000,
+    timer: 4500,
   }).then((result) => {});
 }
 
@@ -239,7 +248,7 @@ async function cellClick(index) {
         setTimeout(() => {
           resetGame();
           printBtnPlayScreen(-100, -100);
-        }, 3000);
+        }, 4000);
         return;
       }
       if (checkDraw()) {
@@ -250,7 +259,7 @@ async function cellClick(index) {
         setTimeout(() => {
           resetGame();
           printBtnPlayScreen(-100, -100);
-        }, 3000);
+        }, 4000);
         return;
       }
 
@@ -292,7 +301,6 @@ function printBtnPlayScreen(mouseX, mouseY) {
 
   boardCtx.drawImage(imgLogo, (boardCanvas.width - logoSize) / 2, buttonY - (logoSize + 50), logoSize, logoSize);
 
-  // Vẽ hình chữ nhật (nút)
   if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
     if (click) {
       boardCtx.drawImage(imgPlayBtnClick, buttonX, buttonY, buttonWidth, buttonHeight);
@@ -316,11 +324,42 @@ function printBtnPlayScreen(mouseX, mouseY) {
 
 function printResult(result) {
   if (result === "O") {
-    showPopup("Chúc mừng! Bạn đã chiến thắng", "success");
+    const rd = Math.floor(Math.random() * 4);
+    switch (rd) {
+      case 0:
+        showPopup("Bạn đã chiến thắng 👍👍👍👍👍👍", "BẠN THẮNG");
+        break;
+      case 1:
+        showPopup("Tôi chịu thuiiiiiiii 😭😭😭😭😭😭😭", "BẠN THẮNG");
+        break;
+      case 2:
+        showPopup("Nhường bạn đấy, sợ bạn bị buồn cơ 🙂🙂🙂🙂🙂🙂", "BẠN THẮNG");
+        break;
+      case 3:
+        showPopup("Cờ thủ chính hiệu là bạn 🤙🤙", "BẠN THẮNG");
+        break;
+      default:
+        showPopup("Bạn đã chiến thắng 👏👏👏👏👏👏", "BẠN THẮNG");
+        break;
+    }
   } else if (result === "X") {
-    showPopup("Hihii! Máy đã thắng", "error");
+    const rd = Math.floor(Math.random() * 3);
+    switch (rd) {
+      case 0:
+        showPopup("Ahihi! Tớ thắng rồi nhé 😁😁😁😁😁", "MÁY THẮNG");
+        break;
+      case 1:
+        showPopup("Game là dễ 🤭🤭🤭🤭", "MÁY THẮNG");
+        break;
+      case 2:
+        showPopup("Vài đường cơ bản 😜😜😜😜", "MÁY THẮNG");
+        break;
+      default:
+        showPopup("Hihii! Tớ thắng rồi nhé 🥱🥱🥱", "MÁY THẮNG");
+        break;
+    }
   } else {
-    showPopup("Hòa rồi :))", "info");
+    showPopup("Hòa rồi 🥱🥱🥱🥱🥱🥱🥱", "HÒA");
   }
 }
 
@@ -468,7 +507,7 @@ function onResults(results) {
       const value = test;
       // console.log(value);
       if (click) {
-        if (value >= 0.02) {
+        if (value >= 0.018) {
           click = false;
         }
       } else {
@@ -477,8 +516,23 @@ function onResults(results) {
         }
       }
 
-      const mouseX = boardCanvas.width - (boardCanvas.width / 100) * results.multiHandLandmarks[0][0].x * 100;
-      const mouseY = (boardCanvas.height / 100) * results.multiHandLandmarks[0][0].y * 100;
+      if (
+        results.multiHandLandmarks[0][0].x * 100 >= DPI_MIN &&
+        results.multiHandLandmarks[0][0].x * 100 <= DPI_MAX &&
+        results.multiHandLandmarks[0][0].y * 100 >= DPI_MIN &&
+        results.multiHandLandmarks[0][0].y * 100 <= DPI_MAX
+      ) {
+        const coefficientX = ((results.multiHandLandmarks[0][0].x * 100 - DPI_MIN) / DPI) * 100;
+        const coefficientY = ((results.multiHandLandmarks[0][0].y * 100 - DPI_MIN) / DPI) * 100;
+        const coefficient = 100;
+        mouseX = boardCanvas.width - (boardCanvas.width / coefficient) * coefficientX;
+        mouseY = (boardCanvas.height / coefficient) * coefficientY;
+
+        if (mouseX < 0) mouseX = 0;
+        if (mouseY < 0) mouseY = 0;
+        if (mouseX > boardCanvas.width - 25) mouseX = boardCanvas.width - 25;
+        if (mouseY > boardCanvas.height - 25) mouseY = boardCanvas.height - 25;
+      }
 
       if (playing && isLeftHand) {
         boardCtx.fillStyle = "#fff";
@@ -498,6 +552,7 @@ function onResults(results) {
               if (click && cells[index].length === 0 && currentPlayer === "O") {
                 cell.className = "chess-board_cell-item click";
                 cellClick(index);
+                click = false;
               } else {
                 cell.className = "chess-board_cell-item hover";
               }
@@ -564,7 +619,7 @@ const camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({ image: videoElement });
   },
-  width: 800,
-  height: 800,
+  width: 500,
+  height: 500,
 });
 camera.start();
