@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-image: url("../images/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+header {
+  text-align: center;
+  color: white;
+}
+
+header h1 {
+  font-size: 2em;
+  font-weight: 900;
+}
+
+#container_app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#container_AI {
+  /* width: 500px; */
+  /* position: absolute; */
+  /* top: 20%; */
+  /* left: 50px; */
+}
+.title {
+  color: #fff;
+  text-align: center;
+}
+.input_video {
+  display: none;
+}
+.output_canvas {
+  border: 3px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* #container_3D canvas {
+  flex: 1;
+} */

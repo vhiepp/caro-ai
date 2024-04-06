@@ -1,0 +1,122 @@
+<!--
+  EYE FREE MODEL 3D BY Oscar creativo by OSCAR CREATIVO is licensed under Creative Commons Attribution.
+  Juvenile Teratophoneus curriei byrankinstudio is licensed under Creative Commons Attribution.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Introduce AI create</title>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      .chess-board {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-wrap: wrap;
+        border: 2px solid #ccc;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+      #board {
+        border: 2px solid #ccc;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+
+      .chess-board_cell {
+        width: 33.33%;
+        height: 33.33%;
+      }
+      .chess-board_cell-item {
+        width: 360px;
+        height: 360px;
+        /* background-color: aquamarine; */
+        position: absolute;
+        border: 1px solid #ccc;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        font-size: 260px;
+        font-weight: bold;
+      }
+      .chess-board_cell-item.hover {
+        background-color: yellow;
+        opacity: 0.2;
+      }
+      .chess-board_cell-item.X {
+        color: red;
+      }
+      .chess-board_cell-item.O {
+        color: green;
+      }
+      .chess-board_cell-item.click {
+        background-color: aqua;
+        opacity: 0.2;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="container_app">
+      <div id="container_AI" style="display: flex; gap: 10px">
+        <div style="display: none">
+          <video class="input_video"></video>
+          <canvas class="output_canvas" width="400px" height="400px"></canvas>
+        </div>
+        <div
+          style="
+            width: 1080px;
+            height: 1080px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div class="chess-board" id="chess-board"></div>
+          <p
+            id="level0"
+            style="position: absolute; font-size: 35px; font-weight: bold; top: -20px; color: #1872cc; display: none"
+          >
+            Dễ
+          </p>
+          <p
+            id="level1"
+            style="position: absolute; font-size: 35px; font-weight: bold; top: -20px; color: #056b39; display: none"
+          >
+            Trung bình
+          </p>
+          <p
+            id="level2"
+            style="position: absolute; font-size: 35px; font-weight: bold; top: -20px; color: red; display: none"
+          >
+            Khó
+          </p>
+          <canvas class="" id="board" width="1080px" height="1080px"></canvas>
+        </div>
+      </div>
+    </main>
+    <script>
+      let num_hand = 0;
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="js/AI_hand.js"></script>
+    <!-- <script type="module" src="js/3d.js"></script> -->
+  </body>
+</html>
