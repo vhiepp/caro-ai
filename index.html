@@ -85,11 +85,15 @@
   <body>
     <main id="container_app">
       <div id="container_AI" style="display: flex; gap: 10px">
-        <div>
-          <div style="display: none">
-            <video class="input_video"></video>
-            <canvas class="output_canvas" width="500px" height="500px"></canvas>
-          </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+            justify-content: space-between;
+          "
+        >
           <div class="user-manual">
             <h2 class="user-manual_title">Hướng dẫn</h2>
             <div>
@@ -112,6 +116,10 @@
               <span>Máy: </span>
               <span style="font-size: 2rem; font-weight: 700; color: red; margin-left: 0.3rem">X</span>
             </div>
+          </div>
+          <div style="">
+            <video class="input_video"></video>
+            <canvas class="output_canvas" width="300px" height="300px"></canvas>
           </div>
         </div>
         <div
