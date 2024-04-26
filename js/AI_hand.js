@@ -500,8 +500,8 @@ function onResults(results) {
 
   if (results.multiHandLandmarks) {
     for (const landmarks of results.multiHandLandmarks) {
-      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 5 });
-      drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
+      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 2 });
+      drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 0 });
     }
   }
 
@@ -509,11 +509,11 @@ function onResults(results) {
     if (results.multiHandLandmarks.length > 0) {
       const landmarks = results.multiHandLandmarks[0];
       const isLeftHand = landmarks[0].x < landmarks[8].x;
-      const handLabel = isLeftHand ? "Phải" : "Trái";
+      // const handLabel = isLeftHand ? "Phải" : "Trái";
 
       const value = V3.distance(results.multiHandLandmarks[0][8], results.multiHandLandmarks[0][4]);
       if (click) {
-        if (value >= 0.025) {
+        if (value >= (playing ? 0.06 : 0.025)) {
           click = false;
           isReleased = true;
         }
@@ -542,7 +542,7 @@ function onResults(results) {
         const mTempY = (boardCanvas.height / coefficient) * coefficientY;
         const distance2Value = distance2(mTempX, mTempY, mouseX, mouseY);
 
-        if (distance2Value > 8) {
+        if (distance2Value > 12) {
           mouseX = mTempX;
           mouseY = mTempY;
           if (mouseX < 0) mouseX = 0;
@@ -552,7 +552,8 @@ function onResults(results) {
         }
       }
 
-      if (playing && isLeftHand) {
+      // if (playing && isLeftHand) {
+      if (playing) {
         boardCtx.fillStyle = "#fff";
         boardCtx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
         const row = Math.trunc(mouseY / (boardCanvas.width / 3));
@@ -583,13 +584,13 @@ function onResults(results) {
           }
         }
       } else {
-        if (isLeftHand) {
-          if (selectingLevel) {
-            printSelectLevelScreen(mouseX, mouseY);
-          } else {
-            printBtnPlayScreen(mouseX, mouseY);
-          }
+        // if (isLeftHand) {
+        if (selectingLevel) {
+          printSelectLevelScreen(mouseX, mouseY);
+        } else {
+          printBtnPlayScreen(mouseX, mouseY);
         }
+        // }
       }
     }
 
@@ -629,6 +630,10 @@ const hands = new Hands({
   },
 });
 hands.setOptions({
+  smoothLandmarks: true,
+  enableSegmentation: true,
+  smoothSegmentation: true,
+  refineFaceLandmarks: true,
   maxNumHands: 1,
   modelComplexity: 1,
   minDetectionConfidence: 0.5,
