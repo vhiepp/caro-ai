@@ -55,6 +55,8 @@ img2.src = "../images/2.png";
 
 let mouseX = 0;
 let mouseY = 0;
+let isClicked = false;
+let isReleased = true;
 
 let level = 0;
 let selectingLevel = false;
@@ -455,12 +457,19 @@ setTimeout(() => {
   printBtnPlayScreen(-100, -100);
 }, 2000);
 
+function distance2(x1, y1, x2, y2) {
+  const dx = x1 - x2;
+  const dy = y1 - y2;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 class V3 {
   static distance(p1, p2) {
     const dx = p1.x - p2.x;
     const dy = p1.y - p2.y;
-    const dz = p1.z - p2.z;
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    // const dz = p1.z - p2.z;
+    return Math.sqrt(dx * dx + dy * dy);
+    // return Math.sqrt(dx * dx + dy * dy + dz * dz);
     //return dx * dx + dy * dy + dz * dz;
   }
   static sub(p1, p2) {
@@ -502,17 +511,21 @@ function onResults(results) {
       const isLeftHand = landmarks[0].x < landmarks[8].x;
       const handLabel = isLeftHand ? "Phải" : "Trái";
 
-      const test = V3.distance(results.multiHandLandmarks[0][8], results.multiHandLandmarks[0][4]);
-
-      const value = test;
-      // console.log(value);
+      const value = V3.distance(results.multiHandLandmarks[0][8], results.multiHandLandmarks[0][4]);
       if (click) {
-        if (value >= 0.018) {
+        if (value >= 0.025) {
           click = false;
+          isReleased = true;
         }
       } else {
-        if (value < 0.015) {
-          click = true;
+        if (!isClicked) {
+          if (value < 0.014) {
+            click = true;
+            isClicked = true;
+            // setTimeout(() => {
+            isClicked = false;
+            // }, 500);
+          }
         }
       }
 
@@ -525,13 +538,18 @@ function onResults(results) {
         const coefficientX = ((results.multiHandLandmarks[0][0].x * 100 - DPI_MIN) / DPI) * 100;
         const coefficientY = ((results.multiHandLandmarks[0][0].y * 100 - DPI_MIN) / DPI) * 100;
         const coefficient = 100;
-        mouseX = boardCanvas.width - (boardCanvas.width / coefficient) * coefficientX;
-        mouseY = (boardCanvas.height / coefficient) * coefficientY;
+        const mTempX = boardCanvas.width - (boardCanvas.width / coefficient) * coefficientX;
+        const mTempY = (boardCanvas.height / coefficient) * coefficientY;
+        const distance2Value = distance2(mTempX, mTempY, mouseX, mouseY);
 
-        if (mouseX < 0) mouseX = 0;
-        if (mouseY < 0) mouseY = 0;
-        if (mouseX > boardCanvas.width - 25) mouseX = boardCanvas.width - 25;
-        if (mouseY > boardCanvas.height - 25) mouseY = boardCanvas.height - 25;
+        if (distance2Value > 8) {
+          mouseX = mTempX;
+          mouseY = mTempY;
+          if (mouseX < 0) mouseX = 0;
+          if (mouseY < 0) mouseY = 0;
+          if (mouseX > boardCanvas.width - 25) mouseX = boardCanvas.width - 25;
+          if (mouseY > boardCanvas.height - 25) mouseY = boardCanvas.height - 25;
+        }
       }
 
       if (playing && isLeftHand) {
@@ -549,10 +567,13 @@ function onResults(results) {
             const cell = document.getElementById(`chess-board_cell-${i}-${j}`);
             const index = i * 3 + j;
             if (i === row && j === col) {
-              if (click && cells[index].length === 0 && currentPlayer === "O") {
-                cell.className = "chess-board_cell-item click";
-                cellClick(index);
+              if (click && isReleased) {
+                if (cells[index].length === 0 && currentPlayer === "O") {
+                  cell.className = "chess-board_cell-item click";
+                  cellClick(index);
+                }
                 click = false;
+                isReleased = false;
               } else {
                 cell.className = "chess-board_cell-item hover";
               }
@@ -608,7 +629,7 @@ const hands = new Hands({
   },
 });
 hands.setOptions({
-  maxNumHands: 2,
+  maxNumHands: 1,
   modelComplexity: 1,
   minDetectionConfidence: 0.5,
   minTrackingConfidence: 0.5,
